@@ -56,8 +56,8 @@ pred_prob = xgb_model.predict_proba(X_test)[:, 1] #Predicts the probability of a
 accuracy = accuracy_score(y_test, pred_class)
 log_l = log_loss(y_test, pred_prob)
 
-print(accuracy) #0.697
-print(log_l) #0.566
+print(accuracy) #0.687
+print(log_l) #0.572
 
 importance = pd.Series(xgb_model.feature_importances_, index=X).sort_values(ascending=False) #feature importance
 print(importance)
@@ -65,4 +65,8 @@ print(importance)
 plt.figure(figsize = (8,6))
 sns.barplot(x = importance.values, y = importance.index)
 plt.title("Feature Importance")
+plt.show()
+clipped = X_test[X_test['ydstogo']<=25] #Clips the dataset at 25 or less yds to go
+sns.lineplot(x = clipped['ydstogo'], y=pred_prob, hue = X_test['down'], palette='tab10')
+plt.title("Play Type Prediction based on the Down and Yards to Go")
 plt.show()
